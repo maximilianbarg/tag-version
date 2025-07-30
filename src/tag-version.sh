@@ -268,5 +268,5 @@ pushToOrigin;
 
 outLog "Tag version complete.";
 outLog "Output: $NEW_REVISION";
-echo "::set-output name=revision::$NEW_REVISION";
-echo "::set-output name=is-prerelease::$IS_PRERELEASE"
+echo "revision=$NEW_REVISION" >> "$GITHUB_OUTPUT"
+echo "is-prerelease=$IS_PRERELEASE" >> "$GITHUB_OUTPUT"
