@@ -18,6 +18,8 @@ outLog() {
 	echo "$1"
 } >&2
 
+
+
 getLatestRevision() {
     local branch="$1"
     outLog "Getting latest tagged revision ..."
@@ -206,14 +208,12 @@ tagRelease() {
 	outLog "Annotated Message: $MESSAGE";
 
 	git tag -a "v$REVISION" -m "$MESSAGE";
-	git tag -f latest
 }
 
 pushToOrigin() {
 	outLog "Pushing changes to origin ...";
 
 	git push 2> /dev/null;
-	git push origin :latest 2> /dev/null;
 	git push --tags 2> /dev/null;
 
 	outLog "Push successful.";
@@ -226,19 +226,10 @@ outLog "Dev Branch: $DEV_BRANCH";
 BRANCH="$(git branch --show-current)";
 outLog "Current branch: $BRANCH";
 
-REVISION="$(getLatestRevision)";
+REVISION="$(getLatestRevision "$BRANCH")";
 outLog "Latest Revision: $REVISION";
 
-if [ -z "$REVISION" ]; then
-	outLog "Tag version failed! Version must exist at :latest";
-	exit 32;
-fi
-
-if [ "$REVISION" != "NA" ]; then
-	REVISION_TYPE="$(getRevisionType)";
-else
-	REVISION_TYPE="major";
-fi
+REVISION_TYPE="$(getRevisionType)";
 outLog "Revision Type: $REVISION_TYPE";
 
 if [ "$BRANCH" = "$DEV_BRANCH" ]; then
